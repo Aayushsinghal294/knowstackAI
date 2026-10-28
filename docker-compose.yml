@@ -1,0 +1,21 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: knowstack-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: knowstack
+      POSTGRES_USER: knowstack_user
+      POSTGRES_PASSWORD: local_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - knowstack_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U knowstack_user -d knowstack"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  knowstack_pgdata:

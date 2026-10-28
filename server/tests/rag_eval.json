@@ -1,0 +1,43 @@
+
+[
+  {
+    "question": "What does RAG stand for?",
+    "expected_behavior": "answer",
+    "required_terms": ["Retrieval-Augmented Generation"]
+  },
+  {
+    "question": "How does vector similarity help?",
+    "expected_behavior": "answer",
+    "required_terms": ["similarity"]
+  },
+  {
+    "question": "What is an embedding?",
+    "expected_behavior": "answer",
+    "required_terms": ["numerical representation"]
+  },
+  {
+    "question": "Why should a knowledge assistant cite sources?",
+    "expected_behavior": "answer",
+    "required_terms": ["sources"]
+  },
+  {
+    "question": "What is my name?",
+    "expected_behavior": "answer",
+    "required_terms": ["Aayush Singhal"]
+  },
+  {
+    "question": "What is the company's annual revenue?",
+    "expected_behavior": "abstain",
+    "required_terms": []
+  },
+  {
+    "question": "How many employees does the company have?",
+    "expected_behavior": "abstain",
+    "required_terms": []
+  },
+  {
+    "question": "Which programming language was used to build the company's mobile application?",
+    "expected_behavior": "abstain",
+    "required_terms": []
+  }
+]

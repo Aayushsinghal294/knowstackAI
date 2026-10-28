@@ -1,0 +1,29 @@
+
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+client/.env.local
+server/.env
+
+# Python
+server/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Node.js / Next.js
+client/node_modules/
+client/.next/
+client/out/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local uploads and generated data
+uploads/
+data/
+evaluation/reports/

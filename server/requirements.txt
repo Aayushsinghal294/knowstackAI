@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+pydantic-settings
+openai
+sqlalchemy
+psycopg[binary]
+pgvector
+python-multipart
+pypdf
+python-docx
+sentence-transformers
+google-genai
+pytest
+requests
+pwdlib[argon2]
+PyJWT
+email-validator
