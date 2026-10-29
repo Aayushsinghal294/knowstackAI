@@ -14,6 +14,13 @@ class Conversation(Base):
         server_default=func.now(),
         nullable=False,
     )
+    
+    user_id = Column(
+    Integer,
+    ForeignKey("users.id", ondelete="CASCADE"),
+    nullable=False,
+    index=True,
+)
 
 
 class ChatMessage(Base):

@@ -70,10 +70,13 @@ def split_text(text: str) -> list[str]:
     return chunks
 
 
+
 def ingest_document(
     db: Session,
     filename: str,
     data: bytes,
+    *,
+    user_id: int,
 ) -> dict:
     if len(data) > MAX_FILE_SIZE:
         raise ValueError("File exceeds the 10 MB limit.")
@@ -87,9 +90,7 @@ def ingest_document(
             prepared_chunks.append((page_number, chunk))
 
     if not prepared_chunks:
-        raise ValueError(
-            "No readable text found in the document."
-        )
+        raise ValueError("No readable text found in the document.")
 
     texts = [chunk for _, chunk in prepared_chunks]
 
@@ -101,10 +102,12 @@ def ingest_document(
 
     try:
         document = Document(
+            user_id=user_id,
             filename=Path(filename).name,
             file_type=Path(filename).suffix.lower().lstrip("."),
             status="processed",
         )
+
         db.add(document)
         db.flush()
 

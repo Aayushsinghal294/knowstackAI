@@ -19,6 +19,11 @@ class Document(Base):
     id: Mapped[int] = mapped_column(
         Integer, primary_key=True, index=True
     )
+    user_id: Mapped[int] = mapped_column(
+    ForeignKey("users.id", ondelete="CASCADE"),
+    nullable=False,
+    index=True,
+    )
     filename: Mapped[str] = mapped_column(String(255), nullable=False)
     file_type: Mapped[str] = mapped_column(String(20), nullable=False)
     status: Mapped[str] = mapped_column(

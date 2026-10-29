@@ -1,3 +1,4 @@
+
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
@@ -6,6 +7,8 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.models.document import Document, DocumentChunk
+from app.models.user import User
+from app.api.auth import get_current_user
 from app.services.ingestion import ingest_document
 
 router = APIRouter(prefix="/api/v1/documents", tags=["documents"])
@@ -17,6 +20,7 @@ ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md"}
 def upload_document(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     filename = file.filename or "document"
     extension = Path(filename).suffix.lower()
@@ -34,6 +38,7 @@ def upload_document(
             db=db,
             filename=filename,
             data=data,
+            user_id=current_user.id,
         )
 
         return result
@@ -49,9 +54,14 @@ def upload_document(
 
 
 @router.get("")
-def list_documents(db: Session = Depends(get_db)):
+def list_documents(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     documents = db.scalars(
-        select(Document).order_by(Document.id.desc())
+        select(Document)
+        .where(Document.user_id == current_user.id)
+        .order_by(Document.id.desc())
     ).all()
 
     return [
@@ -71,8 +81,14 @@ def list_documents(db: Session = Depends(get_db)):
 def list_document_chunks(
     document_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    document = db.get(Document, document_id)
+    document = db.scalar(
+        select(Document).where(
+            Document.id == document_id,
+            Document.user_id == current_user.id,
+        )
+    )
 
     if document is None:
         raise HTTPException(status_code=404, detail="Document not found.")
@@ -98,8 +114,14 @@ def list_document_chunks(
 def delete_document(
     document_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    document = db.get(Document, document_id)
+    document = db.scalar(
+        select(Document).where(
+            Document.id == document_id,
+            Document.user_id == current_user.id,
+        )
+    )
 
     if document is None:
         raise HTTPException(status_code=404, detail="Document not found.")

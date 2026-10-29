@@ -13,6 +13,7 @@ MAX_TOP_K = 10
 def search_documents(
     db: Session,
     query: str,
+    user_id: int,
     top_k: int = 5,
 ) -> list[dict]:
     query = query.strip()
@@ -22,17 +23,13 @@ def search_documents(
 
     top_k = max(1, min(top_k, MAX_TOP_K))
 
-    # Use the same embedding model as document ingestion.
     query_vector = embedding_model.encode(
         query,
         normalize_embeddings=True,
         show_progress_bar=False,
     ).tolist()
 
-    # Lower cosine distance means greater similarity.
     distance = DocumentChunk.embedding.cosine_distance(query_vector)
-
-    # Convert the minimum similarity threshold to a maximum distance.
     max_distance = 1.0 - MIN_SIMILARITY
 
     statement = (
@@ -45,7 +42,10 @@ def search_documents(
             Document,
             Document.id == DocumentChunk.document_id,
         )
-        .where(distance <= max_distance)
+        .where(
+            Document.user_id == user_id,
+            distance <= max_distance,
+        )
         .order_by(distance)
         .limit(top_k)
     )
