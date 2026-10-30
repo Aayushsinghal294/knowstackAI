@@ -18,7 +18,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
     if not request.query.strip():
         raise HTTPException(
             status_code=400,
-            detail="Query cannot be empty.",
+            detail="Query cannot be empty.", 
         )
 
     try:
@@ -31,7 +31,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
         return {
             "query": request.query,
             "results_count": len(results),
-            "results": results,
+            "results": results, 
         }
 
     except ValueError as exc:
