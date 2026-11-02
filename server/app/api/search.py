@@ -19,6 +19,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=400, 
             detail="Query cannot be empty.", 
+            
         )
 
     try:
