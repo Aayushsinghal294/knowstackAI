@@ -24,7 +24,7 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
 
     try:
         results  = search_documents(
-            db=db,
+            db=db, 
             query=request.query,
             top_k=request.top_k,
         )
