@@ -9,21 +9,22 @@ router = APIRouter(prefix="/api/v1/search", tags=["search"])
 
 
 class SearchRequest(BaseModel):
-    query: str = Field(min_length=1, max_length=1900)
+    query: str = Field(min_length=1, max_length=2190)
     top_k: int = Field(default=5, ge=1, le=10) 
  
 
-@router.post("")
+@router.post("") 
 def search(request: SearchRequest, db: Session = Depends(get_db)):
     if not request.query.strip():
         raise HTTPException(
-            status_code=400,
+            status_code=400, 
             detail="Query cannot be empty.", 
+            
         )
 
     try:
         results  = search_documents(
-            db=db,
+            db=db,  
             query=request.query,
             top_k=request.top_k,
         )
