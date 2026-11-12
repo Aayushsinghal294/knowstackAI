@@ -18,13 +18,13 @@ def search(request: SearchRequest, db: Session = Depends(get_db)):
     if not request.query.strip():
         raise HTTPException(
             status_code=400, 
-            detail="Query cannot be empty . ", 
+            detail="Query cannot be empty.", 
             
         )
 
     try:
         results  = search_documents(   
-            db=db,   
+            db=db,    
             query=request.query,
             top_k=request.top_k,
         )
